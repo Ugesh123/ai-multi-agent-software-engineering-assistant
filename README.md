@@ -42,6 +42,7 @@ pipeline instead of a single black-box model call.
   theme, responsive layout.
 
 ## Quick start
+![Uploading Screenshot 2026-07-16 172100.png…]()
 
 ```bash
 # 1. Start Ollama and pull a model
