@@ -1,0 +1,83 @@
+@import "tailwindcss";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+
+/*
+ * Design tokens for the "engineering console" theme.
+ * Every color maps to a real pipeline/status meaning -- see
+ * src/lib/theme.ts for the semantic mapping used by components.
+ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+  --color-ink: #0a0c10;
+  --color-surface: #12151c;
+  --color-surface-raised: #171b24;
+  --color-hairline: #232838;
+  --color-hairline-strong: #2f3648;
+  --color-text-hi: #e9ecf4;
+  --color-text-lo: #8891a6;
+  --color-text-faint: #5b6377;
+
+  --color-signal-idle: #3a4155;
+  --color-signal-amber: #f0a93c;
+  --color-signal-violet: #8b7cf6;
+  --color-signal-teal: #2fd9b0;
+  --color-signal-red: #f0555f;
+  --color-signal-blue: #4f9dff;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+/* Light theme override -- toggled via `.light` on <html> (see App.tsx).
+   Dark values above remain the defaults for `.dark` / no class. */
+.light {
+  --color-ink: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f0f1f4;
+  --color-hairline: #e2e4ea;
+  --color-hairline-strong: #d3d6e0;
+  --color-text-hi: #14161c;
+  --color-text-lo: #4b5164;
+  --color-text-faint: #8790a3;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-text-hi);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-signal-blue) 35%, transparent);
+}
+
+/* Thin, quiet scrollbars that fit a console UI. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-hairline-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-hairline-strong);
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,66 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    # GPU acceleration (optional): uncomment if the host has an NVIDIA GPU
+    # and the NVIDIA Container Toolkit installed.
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      MACA_ENVIRONMENT: production
+      MACA_LLM_PROVIDER: ollama
+      MACA_OLLAMA_BASE_URL: http://ollama:11434
+      MACA_OLLAMA_MODEL: ${MACA_OLLAMA_MODEL:-qwen3:14b}
+      MACA_EMBEDDING_PROVIDER: ollama
+      MACA_OLLAMA_EMBEDDING_MODEL: ${MACA_OLLAMA_EMBEDDING_MODEL:-nomic-embed-text}
+      MACA_DATABASE_URL: sqlite+aiosqlite:////app/data/maca.db
+      MACA_WORKSPACE_ROOT: /app/workspaces
+      MACA_CORS_ALLOW_ORIGINS: '["http://localhost","http://localhost:80","http://localhost:5173"]'
+      MACA_ANTHROPIC_API_KEY: ${MACA_ANTHROPIC_API_KEY:-}
+      MACA_ANTHROPIC_MODEL: ${MACA_ANTHROPIC_MODEL:-}
+    volumes:
+      - backend_data:/app/data
+      - backend_workspaces:/app/workspaces
+    depends_on:
+      ollama:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  ollama_data:
+  backend_data:
+  backend_workspaces:
