@@ -104,6 +104,15 @@ explicitly rather than papered over. See
 for the full reasoning and what would need to change for multi-user
 deployment.
 
+## 🚧 Project Status
+
+This project is under active development.
+
+- ✅ Multi-agent workflow implemented
+- ✅ Backend and frontend completed
+- ✅ Local development supported
+- 🔄 Deployment improvements are in progress
+
 ## License
 
 MIT
