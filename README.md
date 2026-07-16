@@ -15,6 +15,7 @@ pipeline instead of a single black-box model call.
 ![license](https://img.shields.io/badge/license-MIT-lightgrey)
 
 ---
+<img width="2880" height="1280" alt="Screenshot 2026-07-16 171830" src="https://github.com/user-attachments/assets/fd55adae-2fad-4b3a-943f-5e33dccf610f" />
 
 ## Capabilities
 
